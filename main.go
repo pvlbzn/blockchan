@@ -34,6 +34,7 @@ func (b *Block) save() error {
 	return nil
 }
 
+// Hash block # n
 func hash(n int) error {
 	fname := "blocks/" + strconv.Itoa(n) + ".block"
 	f, err := ioutil.ReadFile(fname)
@@ -42,7 +43,10 @@ func hash(n int) error {
 	}
 
 	sha := sha256.New()
-	sha.Write(f)
+	_, err = sha.Write(f)
+	if err != nil {
+		return err
+	}
 
 	fmt.Printf("%x", sha.Sum(nil))
 
