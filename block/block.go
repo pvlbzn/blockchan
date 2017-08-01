@@ -28,11 +28,23 @@ func (t *Transaction) String() string {
 	return t.From + " -> " + t.To + " : " + strconv.Itoa(t.Amount)
 }
 
+// String implements Stringer interface. Such that a block
+// can be printed well using fmt package.
+func (b *Block) String() string {
+	var t string
+	for _, transaction := range b.Transactions {
+		t += fmt.Sprintf("%s\n", transaction.String())
+	}
+	return t + b.PreviousHash
+}
+
 // NewTransaction is a convinience wrapper for a new transaction.
 func NewTransaction(from, to string, amount int) *Transaction {
 	return &Transaction{From: from, To: to, Amount: amount}
 }
 
+// NewBlock constructor for a block. It calculates a hash of a last block
+// and finds a next number of a block.
 func NewBlock() (*Block, error) {
 	n, err := findLast()
 	if err != nil {
@@ -49,6 +61,7 @@ func NewBlock() (*Block, error) {
 	return &Block{Number: n + 1, PreviousHash: h}, nil
 }
 
+// findLast block in blocks directory
 func findLast() (int, error) {
 	blocks, err := ioutil.ReadDir("blocks")
 	if err != nil {
@@ -71,6 +84,7 @@ func findLast() (int, error) {
 	return n, nil
 }
 
+// ftoh (file to hash)
 func ftoh(n int) (string, error) {
 	f, err := ioutil.ReadFile("blocks/" + strconv.Itoa(n) + ".block")
 	if err != nil {
@@ -80,6 +94,7 @@ func ftoh(n int) (string, error) {
 	return hash(f)
 }
 
+// hash bytes -> hash string
 func hash(f []byte) (string, error) {
 	sha := sha256.New()
 	_, err := sha.Write(f)
@@ -88,16 +103,6 @@ func hash(f []byte) (string, error) {
 	}
 
 	return fmt.Sprintf("%x", sha.Sum(nil)), nil
-}
-
-// String implements Stringer interface. Such that a block
-// can be printed well using fmt package.
-func (b *Block) String() string {
-	var t string
-	for _, transaction := range b.Transactions {
-		t += fmt.Sprintf("%s\n", transaction.String())
-	}
-	return t + b.PreviousHash
 }
 
 // AddTransaction to transaction collection
