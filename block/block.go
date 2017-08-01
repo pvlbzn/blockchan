@@ -139,7 +139,7 @@ func Read(n int) (*Block, error) {
 
 	// Read transactions
 	var transactions []Transaction
-	for n := len(data) - 2; n > 0; n++ {
+	for n := len(data) - 2; n > 0; n-- {
 		l := strings.Split(data[n], " ")
 		amount, err := strconv.ParseInt(l[4], 10, 32)
 		if err != nil {
