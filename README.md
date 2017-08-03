@@ -44,3 +44,17 @@ fmt.Println(status)   // Should be true
 To parse some block out of the file into runtime memory layout (data structure) one should
 use `func Read(n int) (*Block, error)` function. It will parse `n`th block into `Block`
 structure.
+
+
+### Future Hackaton Plan
+
+* Web server/interface to blockchain
+    * Transaction queue
+    * Transaction processing
+    * Public API
+* Form a cryptocurrency on top of blockchain
+    * Nonce
+    * Rules
+* Parallel mining software
+    * Find a hash to transaction
+    * Send a hash to public API
